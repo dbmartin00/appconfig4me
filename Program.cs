@@ -6,10 +6,16 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        // Set up configuration source
+        // // Set up configuration source
+        // var configuration = new ConfigurationBuilder()
+        //     .AddJsonFile("appsettings.json", optional: true)
+        //     .Build();
+
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true)
+            .AddAzureAppConfiguration(Environment.GetEnvironmentVariable("AZURE_APP_CONFIG_CONNECTION_STRING"))
             .Build();
+
 
         // Set up DI
         var services = new ServiceCollection();
@@ -22,7 +28,7 @@ class Program
 
         string flag_name = "first_flag";
         bool isMyFeatureEnabled = await IsFeatureEnabledAsync(featureManager, flag_name);
-        Console.WriteLine($"${flag_name} enabled: {isMyFeatureEnabled}");
+        Console.WriteLine($"{flag_name} enabled: {isMyFeatureEnabled}");
 
         flag_name = "second_flag";
         isMyFeatureEnabled = await IsFeatureEnabledAsync(featureManager, flag_name);
